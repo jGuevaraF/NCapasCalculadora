@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace ML
 {
-        public class Materia
-        {
-            public int IdMateria { get; set; }
-            public string Nombre { get; set; }
-            public decimal Promedio { get; set; }
-            public DateTime FechaRegistro { get; set; }
-        }
+    public class Materia
+    {
+        public int IdMateria { get; set; }
+        public string Nombre { get; set; }
+        public decimal Promedio { get; set; }
+        public DateTime FechaRegistro { get; set; }
+        public decimal Costo { get; set; }
+    }
 
     //1 Nombre Promedio FechaRegistro
 }
