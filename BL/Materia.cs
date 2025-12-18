@@ -234,16 +234,46 @@ namespace BL
                     }
 
 
-                }
             }
-            catch (Exception ex)
+        }
+
+
+
+        public static ML.Materia GetById(int IdMateria)
+        {
+            ML.Materia materia = new ML.Materia();
+
+            using (SqlConnection context = new SqlConnection())
             {
-                result.Correct = false;
-                result.ErrorMessage = ex.Message;
+                context.ConnectionString = DL.Connection.GetConnection();
+
+                SqlCommand command = new SqlCommand();
+                command.Connection = context;
+
+                string query = "SELECT IdMateria, Nombre, Promedio, FechaRegistro FROM Materia WHERE IdMateria = @IdMateria";
+
+                command.CommandText = query;
+
+                command.Parameters.AddWithValue("@IdMateria", IdMateria);
+
+
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                adapter.SelectCommand = command;
+
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+
+                if (dataTable.Rows.Count > 0)
+                {
+                    DataRow row = dataTable.Rows[0];
+                    materia.IdMateria = Convert.ToInt32(row[0]);
+                    materia.Nombre = row[1].ToString();
+                    materia.Promedio = Convert.ToInt32(row[2]);
+                    materia.FechaRegistro = Convert.ToDateTime(row[3]);
+                }
+
             }
-
-            return result;
-
+            return materia;
         }
 
     }
