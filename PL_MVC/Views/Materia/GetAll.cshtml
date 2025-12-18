@@ -1,0 +1,20 @@
+﻿@model List<object>
+
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = null;
+}
+
+<h2>GetAll</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (ML.Materia materia in Model)
+        {
+            <p>@materia.Nombre</p>
+            <p>@materia.Promedio</p>
+        }
+    </div>
+</div>
+

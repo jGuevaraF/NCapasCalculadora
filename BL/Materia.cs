@@ -182,62 +182,6 @@ namespace BL
 
         }
 
-        public static ML.Result GetById(int idMateria)
-        {
-            //List<ML.Materia> materias = new List<ML.Materia>();
-            ML.Result result = new ML.Result();
-
-            try
-            {
-                using (SqlConnection context = new SqlConnection())
-                {
-                    context.ConnectionString = DL.Connection.GetConnection();
-
-                    SqlCommand command = new SqlCommand();
-                    command.Connection = context;
-                    command.CommandText = "MateriaGetById";
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@IdMateria", idMateria);
-
-
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
-
-
-
-                    if (dataTable.Rows.Count > 0)
-                    {
-
-                        DataRow row = dataTable.Rows[0];
-                        //traigo informacion
-
-                        ML.Materia registroBD = new ML.Materia();
-                        registroBD.IdMateria = Convert.ToInt32(row[0]);
-                        registroBD.Nombre = Convert.ToString(row[1]);
-                        registroBD.Promedio = Convert.ToDecimal(row[2]);
-                        registroBD.FechaRegistro = Convert.ToDateTime(row[3]);
-                        registroBD.Costo = Convert.ToDecimal(row[4]);
-
-                        result.Object = registroBD;
-
-
-                        result.Correct = true;
-
-                    }
-                    else
-                    {
-                        result.Correct = false;
-                        result.ErrorMessage = "No existe ese ID";
-                    }
-
-
-            }
-        }
-
-
 
         public static ML.Materia GetById(int IdMateria)
         {
