@@ -1,0 +1,118 @@
+﻿@model ML.Materia
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12">
+            <h2>GetAll</h2>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-6">
+            <button class="btn btn-success w-100">Carga Masiva</button>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-primary w-100">Busqueda Abierta</button>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("GetAll", "Materia", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-6">
+                @Html.LabelFor(model => model.Nombre)
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+            </div>
+            <div class="col-6">
+                @Html.LabelFor(model => model.Semestre.IdSemestre)
+                @Html.DropDownListFor(model => model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Nombre"), "Seleccione un semestre", new { @class = "form-select" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </div>
+    }
+
+
+
+
+
+
+    <div class="row mt-4">
+        <div class="col-12">
+            @Html.ActionLink("Agregar", "Formulario", "Materia", new { IdMateria = 0 }, new { @class = "btn btn-success" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                        <th>IdMateria</th>
+                        <th>Nombre Completo</th>
+                        <th>Promedio</th>
+                        <th>Fecha Registro</th>
+                        <th>Costo</th>
+                        <th>Username</th>
+                        <th>Nombre Semestre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ML.Materia materia in Model.Materias)
+                    {
+                        <tr>
+                            <td>
+                                @*@Html.ActionLink("Editar", "Formulario", "Materia", new { IdMateria = materia.IdMateria }, new { @class = "btn btn-warning" })*@
+
+                                <a class="btn btn-warning" href="@Url.Action("Formulario","Materia",new { IdMateria = materia.IdMateria } )">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                            </td>
+
+                            <td>
+                                @Html.ActionLink("Eliminar", "Delete", "Materia", new { IdMateria = materia.IdMateria }, new { @class = "btn btn-danger", @onclick = "return confirm('Deseas eliminar a la materia?');" })
+                                @*<button class="btn btn-danger"><i class="bi bi-person-x-fill"></i> </button>*@
+                            </td>
+                            <td>@materia.IdMateria</td>
+                            <td>@materia.Nombre</td>
+                            <td>@materia.Promedio</td>
+                            <td>@materia.FechaRegistro</td>
+                            <td>@materia.Costo</td>
+                            <td>@materia.UserName</td>
+                            <td>@materia.Semestre.Nombre</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@*<script>
+    function ConfirmarDelete() {
+        let result = confirm("Deseas eliminar a la materia?");
+        console.log(result)
+        if (result === true) {
+            console.log("User clicked OK");
+            return true;
+        } else {
+            console.log("User clicked Cancel");
+            return false;
+        }
+    }
+</script>*@

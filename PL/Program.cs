@@ -75,24 +75,24 @@ namespace PL
 
             Console.WriteLine("Dame el id que quieres buscar");
             int idMateria = Convert.ToInt32(Console.ReadLine());
-            ML.Result result = BL.Materia.GetById(idMateria);
+            //ML.Result result = BL.Materia.GetById(idMateria);
 
-            if (result.Correct)
-            {
-                //si encontro un registro
-                //mostrarlo
-                ML.Materia materia = (ML.Materia)result.Object; //unboxing
+            //if (result.Correct)
+            //{
+            //    //si encontro un registro
+            //    //mostrarlo
+            //    ML.Materia materia = (ML.Materia)result.Object; //unboxing
 
-                Console.WriteLine("EL id de la materia es " + materia.IdMateria);
-                Console.WriteLine("EL Nombre de la materia es " + materia.Nombre);
-                Console.WriteLine("EL Promedio de la materia es " + materia.Promedio);
-                Console.WriteLine("EL Costo de la materia es " + materia.Costo);
-                Console.WriteLine("=============================================");
-            }
-            else
-            {
-                Console.WriteLine("ERROR " + result.ErrorMessage);
-            }
+            //    Console.WriteLine("EL id de la materia es " + materia.IdMateria);
+            //    Console.WriteLine("EL Nombre de la materia es " + materia.Nombre);
+            //    Console.WriteLine("EL Promedio de la materia es " + materia.Promedio);
+            //    Console.WriteLine("EL Costo de la materia es " + materia.Costo);
+            //    Console.WriteLine("=============================================");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("ERROR " + result.ErrorMessage);
+            //}
 
         }
     }

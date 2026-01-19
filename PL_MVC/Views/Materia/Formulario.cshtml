@@ -1,0 +1,202 @@
+﻿@model ML.Materia
+@{
+    ViewBag.Title = "Formulario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*    Terminar y verificar CRUD *@
+@*    Preguntar al eliminar (Estas seguro que deseas eliminar la materia?)  alert()   *@
+@*    Diferencias entre Entity Framework y ADO.NET  *@
+
+@* Con Helper de Razor *@
+@*  @Html.BeginForm()   *@
+
+
+@*<style>
+        /*Id*/
+        #inptImagen {
+            color: aqua;
+        }
+
+        .form-label {
+            color: red;
+        }
+    </style>*@
+
+@using (Html.BeginForm("Formulario", "Materia", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-12">
+            @Html.HiddenFor(model => model.IdMateria)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
+            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+        </div>
+
+        <div class="col-4">
+            @Html.LabelFor(model => model.Costo, new { @class = "form-label" })
+            @Html.TextBoxFor(model => model.Costo, "{0:#.#}", new { @class = "form-control" })
+        </div>
+
+        <div class="col-4">
+            @Html.LabelFor(model => model.FechaRegistro, new { @class = "form-label" })
+            @Html.TextBoxFor(model => model.FechaRegistro, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            @Html.LabelFor(model => model.Promedio, new { @class = "form-label" })
+            @Html.TextBoxFor(model => model.Promedio, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            @Html.LabelFor(model => model.UserName, new { @class = "form-label" })
+            @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-12">
+            @Html.LabelFor(model => model.Semestre.IdSemestre, new { @class = "form-label" })
+            @*@Html.TextBoxFor(model => model.Semestre.IdSemestre, new { @class = "form-control" })*@
+
+            @Html.DropDownListFor(model => model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Nombre"), "Seleccione un semestre", new { @class = "form-select" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            @Html.HiddenFor(model => model.Imagen)  @*System.Byte[]*@
+            @Html.LabelFor(model => model.Imagen, new { @class = "form-label" })
+            <input type="file" name="inptImagen" id="inptImagen" value="" accept="image/*" />
+
+
+            @if (Model.Imagen == null)
+            {
+                <img id="imgMateria" src="~/Content/Images/materiaDefault.png" alt="Alternate Text" class="w-25" />
+            }
+            else
+            {
+                <img id="imgMateria" src='data:image/png;base64, @Convert.ToBase64String(@Model.Imagen)' alt="Alternate Text" class="w-25" />
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h2>Informacion Grupos</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            @Html.LabelFor(model => model.Grupo.Nombre, new { @class = "form-label" })
+            @Html.TextBoxFor(model => model.Grupo.Nombre, new { @class = "form-control" })
+        </div>
+        <div class="col-4">
+            @Html.LabelFor(model => model.Grupo.Plantel.IdPlantel)
+            @if (Model.Grupo.Plantel.Planteles != null)
+            {
+                @Html.DropDownListFor(model => model.Grupo.Plantel.IdPlantel, new SelectList(Model.Grupo.Plantel.Planteles, "IdPlantel", "Nombre"), "Seleccione un Plantel", new { @class = "form-select", onchange = "GrupoGetByIdPlantel()", @id = "ddlPlantel" })
+            }
+            else
+            {
+                @Html.DropDownListFor(model => model.Grupo.Plantel.IdPlantel, new SelectList(string.Empty, "IdPlantel", "Nombre"), "Seleccione un Plantel", new { @class = "form-select", onchange = "GrupoGetByIdPlantel()", @id = "ddlPlantel" })
+            }
+        </div>
+        <div class="col-4">
+            @Html.LabelFor(model => model.Grupo.IdGrupo)
+            @if (Model.Grupo.Grupos != null)
+            {
+                @Html.DropDownListFor(model => model.Grupo.IdGrupo, new SelectList(Model.Grupo.Grupos, "IdGrupo", "Nombre"), "Seleccione un Grupo", new { @class = "form-select", @id = "ddlGrupo" })
+            }
+            else
+            {
+                @Html.DropDownListFor(model => model.Grupo.IdGrupo, new SelectList(string.Empty), "Seleccione un Grupo", new { @class = "form-select", @id = "ddlGrupo" })
+            }
+        </div>
+    </div>
+
+    <div class="row pt-4">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Guardar</button>
+            @*  Agregar boton para regresar al GetAll   *@
+            @Html.ActionLink("Regresar", "GetAll", "Materia", new { @class = "btn btn-danger" })
+        </div>
+    </div>
+}
+
+
+<script src="~/Scripts/jquery-3.7.0.js"></script>
+<script>
+    function PrevisualizarImagen(input) {
+
+        var rutaArchivo = $(input).val()
+        var formatoRuta = rutaArchivo.split(".")[1].toLowerCase();
+
+        var formatosAceptatos = ["jpg", "jpeg", "webp", "gif", "png"]
+        var esCorrecto = false;
+        for (var formato of formatosAceptatos) {
+            if (formatoRuta == formato) {
+                esCorrecto = true
+            }
+        }
+
+        if (esCorrecto) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (event) {
+
+                    $('#imgMateria').attr('src', event.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        } else {
+            alert("Formatos permitidos: jpg, jpeg, webp, gif, png")
+            // Limpiar los campos (input, imagen)
+        }
+    }
+
+    // onchange
+    $("#inptImagen").change(function () {
+        PrevisualizarImagen(this);
+    });
+
+    function GrupoGetByIdPlantel() {
+        var ddlPlantel = $('#ddlPlantel').val()
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GrupoGetByIdPlantel", "Materia")?IdPlantel=' + ddlPlantel,
+            success: function (result) {
+                console.log(result);
+                if (result.Correct) {
+                    // Pintar los datos
+                    $('#ddlGrupo').empty();
+
+                    $.each(result.Objects, function (key, grupo) {
+                        $('#ddlGrupo').append("<option value='" + grupo.IdGrupo + "' >" + grupo.Nombre +"</option>");
+                        /*  console.log(key + ": " + grupo.IdGrupo, grupo.Nombre);*/
+                    });
+
+                } else {
+                    // Muestro el mensaje de error
+                    alert(result.ErrorMessage)
+                }
+            },
+            error: function (ex) {
+                alert(ex)
+            }
+        });
+    }
+
+</script>

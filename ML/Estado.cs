@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BL
+namespace ML
 {
-    public class Class1
+    public class Estado
     {
+        public int IdEstado { get; set; }
+        public string Nombre { get; set; }
     }
 }
