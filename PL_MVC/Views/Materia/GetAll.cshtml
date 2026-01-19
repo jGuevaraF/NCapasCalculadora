@@ -2,8 +2,10 @@
 @{
     ViewBag.Title = "GetAll";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = null;
 }
 
+<h2>GetAll</h2>
 
 <div class="container">
 
@@ -73,7 +75,7 @@
                 </thead>
                 <tbody>
                     @foreach (ML.Materia materia in Model.Materias)
-                    {
+        {
                         <tr>
                             <td>
                                 @*@Html.ActionLink("Editar", "Formulario", "Materia", new { IdMateria = materia.IdMateria }, new { @class = "btn btn-warning" })*@
@@ -95,7 +97,7 @@
                             <td>@materia.UserName</td>
                             <td>@materia.Semestre.Nombre</td>
                         </tr>
-                    }
+        }
                 </tbody>
             </table>
         </div>
